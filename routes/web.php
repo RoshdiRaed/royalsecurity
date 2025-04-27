@@ -17,3 +17,22 @@ Route::get('/contact', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
+
+Route::get('/services', function () {
+    return view('services');
+});
+
+
+Route::get('/reports', function () {
+    return view('reports');
+});
+
+
+Route::get('/clients', function () {
+    return view('clients');
+});
+
+
+Route::get('/settings', function () {
+    return view('settings');
+});

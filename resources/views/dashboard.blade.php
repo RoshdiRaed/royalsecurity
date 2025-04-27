@@ -97,19 +97,19 @@
         data-aos="fade-right">
         <nav class="p-4">
             <ul class="space-y-4">
-                <li><a href="#"
+                <li><a href="/dashboard"
                         class="nav-link block py-2 px-4 rounded hover:bg-gray-700 hover:text-yellow-400">Dashboard</a>
                 </li>
-                <li><a href="#"
+                <li><a href="/services"
                         class="nav-link block py-2 px-4 rounded hover:bg-gray-700 hover:text-yellow-400">Services</a>
                 </li>
-                <li><a href="#"
+                <li><a href="/clients"
                         class="nav-link block py-2 px-4 rounded hover:bg-gray-700 hover:text-yellow-400">Clients</a>
                 </li>
-                <li><a href="#"
+                <li><a href="/reports"
                         class="nav-link block py-2 px-4 rounded hover:bg-gray-700 hover:text-yellow-400">Reports</a>
                 </li>
-                <li><a href="#"
+                <li><a href="/settings"
                         class="nav-link block py-2 px-4 rounded hover:bg-gray-700 hover:text-yellow-400">Settings</a>
                 </li>
             </ul>
@@ -197,13 +197,41 @@
                 </div>
             </section>
 
-            <!-- Analytics Chart -->
-            <section data-aos="fade-up">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Security Incidents Overview</h2>
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <canvas id="incidentsChart" height="100"></canvas>
-                </div>
-            </section>
+           <!-- Security Incidents Overview -->
+<section data-aos="fade-up" class="mb-12">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Security Incidents Overview</h2>
+        <div class="flex space-x-4">
+            <select id="timeFilter" class="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg px-4 py-2 focus:ring-yellow-400 focus:border-yellow-400">
+                <option value="30days">Last 30 Days</option>
+                <option value="6months">Last 6 Months</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+    </div>
+    <!-- Summary Cards -->
+    <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="text-lg font-semibold text-gray-800">Total Incidents</h3>
+            <p class="text-3xl font-bold text-yellow-400">35</p>
+            <p class="text-sm text-gray-500">+12% from last period</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="text-lg font-semibold text-gray-800">Resolved</h3>
+            <p class="text-3xl font-bold text-yellow-400">28</p>
+            <p class="text-sm text-gray-500">80% resolution rate</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up" data-aos-delay="300">
+            <h3 class="text-lg font-semibold text-gray-800">Pending</h3>
+            <p class="text-3xl font-bold text-yellow-400">7</p>
+            <p class="text-sm text-gray-500">2 critical</p>
+        </div>
+    </div>
+    <!-- Chart -->
+    <div class="bg-white p-6 rounded-xl shadow-lg">
+        <canvas id="incidentsChart" height="100"></canvas>
+    </div>
+</section>
         </div>
     </main>
 
