@@ -63,7 +63,33 @@
         .footer-link:hover {
             color: #facc15;
         }
+
+        /* Modal Styles */
+        #actionModal {
+            transition: opacity 0.3s ease;
+        }
+
+        #actionModal.show {
+            opacity: 1;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #facc15;
+            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.1);
+        }
     </style>
+
 </head>
 
 <body class="bg-gray-100 text-gray-900">
@@ -148,15 +174,15 @@
             <section class="mb-12" data-aos="fade-up">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Quick Actions</h2>
                 <div class="flex space-x-4">
-                    <a href="#"
+                    <button data-action="add-client"
                         class="btn-primary bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500">Add
-                        New Client</a>
-                    <a href="#"
+                        New Client</button>
+                    <button data-action="schedule-service"
                         class="btn-primary bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500">Schedule
-                        Service</a>
-                    <a href="#"
+                        Service</button>
+                    <button data-action="generate-report"
                         class="btn-primary bg-yellow-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-yellow-500">Generate
-                        Report</a>
+                        Report</button>
                 </div>
             </section>
 
@@ -197,46 +223,191 @@
                 </div>
             </section>
 
-           <!-- Security Incidents Overview -->
-<section data-aos="fade-up" class="mb-12">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Security Incidents Overview</h2>
-        <div class="flex space-x-4">
-            <select id="timeFilter" class="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg px-4 py-2 focus:ring-yellow-400 focus:border-yellow-400">
-                <option value="30days">Last 30 Days</option>
-                <option value="6months">Last 6 Months</option>
-                <option value="yearly">Yearly</option>
-            </select>
+            <!-- Security Incidents Overview -->
+            <section data-aos="fade-up" class="mb-12">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Security Incidents Overview</h2>
+                    <div class="flex space-x-4">
+                        <select id="timeFilter"
+                            class="bg-gray-50 border border-gray-300 text-gray-600 text-sm rounded-lg px-4 py-2 focus:ring-yellow-400 focus:border-yellow-400">
+                            <option value="30days">Last 30 Days</option>
+                            <option value="6months">Last 6 Months</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Summary Cards -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up"
+                        data-aos-delay="100">
+                        <h3 class="text-lg font-semibold text-gray-800">Total Incidents</h3>
+                        <p class="text-3xl font-bold text-yellow-400">35</p>
+                        <p class="text-sm text-gray-500">+12% from last period</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up"
+                        data-aos-delay="200">
+                        <h3 class="text-lg font-semibold text-gray-800">Resolved</h3>
+                        <p class="text-3xl font-bold text-yellow-400">28</p>
+                        <p class="text-sm text-gray-500">80% resolution rate</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up"
+                        data-aos-delay="300">
+                        <h3 class="text-lg font-semibold text-gray-800">Pending</h3>
+                        <p class="text-3xl font-bold text-yellow-400">7</p>
+                        <p class="text-sm text-gray-500">2 critical</p>
+                    </div>
+                </div>
+                <!-- Chart -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <canvas id="incidentsChart" height="100"></canvas>
+                </div>
+            </section>
         </div>
-    </div>
-    <!-- Summary Cards -->
-    <div class="grid md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="text-lg font-semibold text-gray-800">Total Incidents</h3>
-            <p class="text-3xl font-bold text-yellow-400">35</p>
-            <p class="text-sm text-gray-500">+12% from last period</p>
+
+        <!-- Modal -->
+        <div id="actionModal"
+            class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white rounded-xl p-6 w-full max-w-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="modalTitle" class="text-xl font-bold text-gray-800">Action</h2>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <form id="actionForm" class="space-y-4">
+                    <div id="formContent">
+                        <!-- Dynamic form content will be injected here -->
+                    </div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelModal"
+                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">Cancel</button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-yellow-400 text-gray-900 rounded-lg hover:bg-yellow-500">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up" data-aos-delay="200">
-            <h3 class="text-lg font-semibold text-gray-800">Resolved</h3>
-            <p class="text-3xl font-bold text-yellow-400">28</p>
-            <p class="text-sm text-gray-500">80% resolution rate</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-lg card-hover" data-aos="fade-up" data-aos-delay="300">
-            <h3 class="text-lg font-semibold text-gray-800">Pending</h3>
-            <p class="text-3xl font-bold text-yellow-400">7</p>
-            <p class="text-sm text-gray-500">2 critical</p>
-        </div>
-    </div>
-    <!-- Chart -->
-    <div class="bg-white p-6 rounded-xl shadow-lg">
-        <canvas id="incidentsChart" height="100"></canvas>
-    </div>
-</section>
-        </div>
+
     </main>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Modal Elements
+        const actionModal = document.getElementById('actionModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const formContent = document.getElementById('formContent');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelModalBtn = document.getElementById('cancelModal');
+        const actionForm = document.getElementById('actionForm');
+        const actionButtons = document.querySelectorAll('.btn-primary[data-action]');
+
+        // Form Templates
+        const formTemplates = {
+            'add-client': `
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Client Name</label>
+            <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="clientEmail" required placeholder="Enter client email" class="mt-1">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Phone</label>
+            <input type="tel" name="clientPhone" placeholder="Enter client phone" class="mt-1">
+        </div>
+    `,
+            'schedule-service': `
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Service Type</label>
+            <select name="serviceType" required class="mt-1">
+                <option value="">Select service</option>
+                <option value="patrol">Site Patrol</option>
+                <option value="assessment">Security Assessment</option>
+                <option value="event">Event Security</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Client</label>
+            <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Date</label>
+            <input type="date" name="serviceDate" required class="mt-1">
+        </div>
+    `,
+            'generate-report': `
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Report Type</label>
+            <select name="reportType" required class="mt-1">
+                <option value="">Select report type</option>
+                <option value="incident">Incident Report</option>
+                <option value="service">Service Report</option>
+                <option value="client">Client Summary</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">Start Date</label>
+            <input type="date" name="startDate" required class="mt-1">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">End Date</label>
+            <input type="date" name="endDate" required class="mt-1">
+        </div>
+    `
+        };
+
+        // Open Modal
+        function openModal(action) {
+            modalTitle.textContent = {
+                'add-client': 'Add New Client',
+                'schedule-service': 'Schedule Service',
+                'generate-report': 'Generate Report'
+            } [action];
+            formContent.innerHTML = formTemplates[action];
+            actionModal.classList.remove('hidden');
+            setTimeout(() => actionModal.classList.add('show'), 10); // Trigger fade-in
+        }
+
+        // Close Modal
+        function closeModal() {
+            actionModal.classList.remove('show');
+            setTimeout(() => actionModal.classList.add('hidden'), 300); // Wait for fade-out
+        }
+
+        // Event Listeners for Buttons
+        actionButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const action = button.getAttribute('data-action');
+                openModal(action);
+            });
+        });
+
+        // Close Modal on Close/Cancel
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+
+        // Handle Form Submission
+        actionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(actionForm);
+            const data = Object.fromEntries(formData);
+            console.log('Form Submitted:', data); // Replace with actual submission logic
+            closeModal();
+            actionForm.reset();
+        });
+
+        // Close Modal on Outside Click
+        actionModal.addEventListener('click', (e) => {
+            if (e.target === actionModal) closeModal();
+        });
+    </script>
     <script>
         AOS.init({
             once: true,
@@ -274,6 +445,33 @@
             }
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const counters = document.querySelectorAll('.text-3xl.font-bold.text-yellow-400');
+            const speed = 100; // lower is faster
+
+            counters.forEach(counter => {
+                const target = +counter.innerText;
+                counter.innerText = '0';
+
+                const updateCount = () => {
+                    const current = +counter.innerText;
+                    const increment = Math.ceil(target / speed);
+
+                    if (current < target) {
+                        counter.innerText = current + increment;
+                        setTimeout(updateCount, 5);
+                    } else {
+                        counter.innerText = target; // to fix overshooting
+                    }
+                };
+
+                updateCount();
+            });
+        });
+    </script>
+
 </body>
 
 </html>
