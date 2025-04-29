@@ -75,7 +75,7 @@
                 <a href="./" class="text-3xl font-bold text-yellow-400 tracking-tight">Royal<span
                         class="text-white">Security</span></a>
                 <div class="hidden md:flex space-x-8 text-base font-semibold">
-                    <a href="./" class="nav-link hover:text-yellow-400">Home</a>
+                    <a href="./" class="nav-link hover:text-yellow-400">Dashboard</a>
                     <a href="./servise" class="nav-link hover:text-yellow-400">Services</a>
                     <a href="./contact" class="nav-link hover:text-yellow-400">Contact</a>
                 </div>
