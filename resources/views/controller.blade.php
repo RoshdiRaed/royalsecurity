@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Royal Security | Gaza Strip</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -118,7 +119,6 @@
         </div>
     </header>
 
-    <!-- Sidebar -->
     <aside id="sidebar" class="bg-gray-800 text-white w-64 h-screen fixed top-16 left-0 sidebar md:translate-x-0"
         data-aos="fade-right">
         <nav class="p-4">
@@ -291,12 +291,69 @@
             </div>
         </div>
 
+        <!-- Templates -->
+        <template id="add-client-form">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Client Name</label>
+                <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" name="clientEmail" required placeholder="Enter client email" class="mt-1">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Phone</label>
+                <input type="tel" name="clientPhone" placeholder="Enter client phone" class="mt-1">
+            </div>
+        </template>
+
+        <template id="schedule-service-form">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Service Type</label>
+                <select name="serviceType" required class="mt-1">
+                    <option value="">Select service</option>
+                    <option value="patrol">Site Patrol</option>
+                    <option value="assessment">Security Assessment</option>
+                    <option value="event">Event Security</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Client</label>
+                <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Date</label>
+                <input type="date" name="serviceDate" required class="mt-1">
+            </div>
+        </template>
+
+        <template id="generate-report-form">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Report Type</label>
+                <select name="reportType" required class="mt-1">
+                    <option value="">Select report type</option>
+                    <option value="incident">Incident Report</option>
+                    <option value="service">Service Report</option>
+                    <option value="client">Client Summary</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Start Date</label>
+                <input type="date" name="startDate" required class="mt-1">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">End Date</label>
+                <input type="date" name="endDate" required class="mt-1">
+            </div>
+        </template>
+
+
     </main>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
+    {{-- <script>
         // Modal Elements
         const actionModal = document.getElementById('actionModal');
         const modalTitle = document.getElementById('modalTitle');
@@ -306,73 +363,31 @@
         const actionForm = document.getElementById('actionForm');
         const actionButtons = document.querySelectorAll('.btn-primary[data-action]');
 
-        // Form Templates
-        const formTemplates = {
-            'add-client': `
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Client Name</label>
-            <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" name="clientEmail" required placeholder="Enter client email" class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Phone</label>
-            <input type="tel" name="clientPhone" placeholder="Enter client phone" class="mt-1">
-        </div>
-    `,
-            'schedule-service': `
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Service Type</label>
-            <select name="serviceType" required class="mt-1">
-                <option value="">Select service</option>
-                <option value="patrol">Site Patrol</option>
-                <option value="assessment">Security Assessment</option>
-                <option value="event">Event Security</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Client</label>
-            <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Date</label>
-            <input type="date" name="serviceDate" required class="mt-1">
-        </div>
-    `,
-            'generate-report': `
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Report Type</label>
-            <select name="reportType" required class="mt-1">
-                <option value="">Select report type</option>
-                <option value="incident">Incident Report</option>
-                <option value="service">Service Report</option>
-                <option value="client">Client Summary</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Start Date</label>
-            <input type="date" name="startDate" required class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">End Date</label>
-            <input type="date" name="endDate" required class="mt-1">
-        </div>
-    `
-        };
 
-        // Open Modal
+
         function openModal(action) {
-            modalTitle.textContent = {
+            const titles = {
                 'add-client': 'Add New Client',
                 'schedule-service': 'Schedule Service',
                 'generate-report': 'Generate Report'
-            } [action];
-            formContent.innerHTML = formTemplates[action];
+            };
+
+            modalTitle.textContent = titles[action];
+
+            // جلب الـ template المناسب من الـ DOM
+            const template = document.getElementById(`${action}-form`);
+            const clone = document.importNode(template.content, true);
+
+            // تفريغ القديم وإضافة الجديد
+            formContent.innerHTML = '';
+            formContent.appendChild(clone);
+
             actionModal.classList.remove('hidden');
-            setTimeout(() => actionModal.classList.add('show'), 10); // Trigger fade-in
+            actionModal.style.display = 'flex'; // إظهار المودال بشكل صحيح
+            setTimeout(() => actionModal.classList.add('show'), 10);
         }
+
+
 
         // Close Modal
         function closeModal() {
@@ -407,7 +422,7 @@
         actionModal.addEventListener('click', (e) => {
             if (e.target === actionModal) closeModal();
         });
-    </script>
+    </script> --}}
     <script>
         AOS.init({
             once: true,
@@ -468,6 +483,68 @@
                 };
 
                 updateCount();
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const actionModal = document.getElementById('actionModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const formContent = document.getElementById('formContent');
+            const closeModalBtn = document.getElementById('closeModal');
+            const cancelModalBtn = document.getElementById('cancelModal');
+            const actionForm = document.getElementById('actionForm');
+            const actionButtons = document.querySelectorAll('.btn-primary[data-action]');
+
+            function openModal(action) {
+                const titles = {
+                    'add-client': 'Add New Client',
+                    'schedule-service': 'Schedule Service',
+                    'generate-report': 'Generate Report'
+                };
+
+                modalTitle.textContent = titles[action];
+                const template = document.getElementById(`${action}-form`);
+                const clone = document.importNode(template.content, true);
+
+                formContent.innerHTML = '';
+                formContent.appendChild(clone);
+
+                actionModal.classList.remove('hidden');
+                actionModal.style.display = 'flex';
+                setTimeout(() => actionModal.classList.add('show'), 10);
+            }
+
+            function closeModal() {
+                actionModal.classList.remove('show');
+                setTimeout(() => {
+                    actionModal.classList.add('hidden');
+                    actionModal.style.display = 'none';
+                }, 200);
+            }
+
+            actionButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const action = button.getAttribute('data-action');
+                    openModal(action);
+                });
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelModalBtn.addEventListener('click', closeModal);
+
+            actionForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formData = new FormData(actionForm);
+                const data = Object.fromEntries(formData);
+                console.log('Form Submitted:', data);
+                closeModal();
+                actionForm.reset();
+            });
+
+            actionModal.addEventListener('click', (e) => {
+                if (e.target === actionModal) closeModal();
             });
         });
     </script>

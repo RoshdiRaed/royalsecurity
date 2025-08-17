@@ -78,6 +78,7 @@
                     <a href="./" class="nav-link hover:text-yellow-400">Dashboard</a>
                     <a href="./servise" class="nav-link hover:text-yellow-400">Services</a>
                     <a href="./contact" class="nav-link hover:text-yellow-400">Contact</a>
+                    <a href="./controller" class="nav-link hover:text-yellow-400">Dashboard</a>
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="tel:+970-59-999999" class="flex items-center text-yellow-400 hover:text-yellow-300">
