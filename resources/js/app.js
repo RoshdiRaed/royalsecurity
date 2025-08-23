@@ -1,112 +1,69 @@
-import './bootstrap';
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize language from localStorage or default to 'en'
+    let isArabic = localStorage.getItem('language') === 'ar';
+    document.documentElement.setAttribute('lang', isArabic ? 'ar' : 'en');
+    document.body.setAttribute('dir', isArabic ? 'rtl' : 'ltr');
 
-// Modal Elements
-const actionModal = document.getElementById('actionModal');
-const modalTitle = document.getElementById('modalTitle');
-const formContent = document.getElementById('formContent');
-const closeModalBtn = document.getElementById('closeModal');
-const cancelModalBtn = document.getElementById('cancelModal');
-const actionForm = document.getElementById('actionForm');
-const actionButtons = document.querySelectorAll('.btn-primary[data-action]');
+    // Update language toggle button text
+    const langToggle = document.getElementById('lang-toggle');
+    if (langToggle) {
+        langToggle.textContent = isArabic ? 'EN' : 'AR';
+    }
 
-// Form Templates
-const formTemplates = {
-    'add-client': `
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Client Name</label>
-            <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" name="clientEmail" required placeholder="Enter client email" class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Phone</label>
-            <input type="tel" name="clientPhone" placeholder="Enter client phone" class="mt-1">
-        </div>
-    `,
-    'schedule-service': `
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Service Type</label>
-            <select name="serviceType" required class="mt-1">
-                <option value="">Select service</option>
-                <option value="patrol">Site Patrol</option>
-                <option value="assessment">Security Assessment</option>
-                <option value="event">Event Security</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Client</label>
-            <input type="text" name="clientName" required placeholder="Enter client name" class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Date</label>
-            <input type="date" name="serviceDate" required class="mt-1">
-        </div>
-    `,
-    'generate-report': `
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Report Type</label>
-            <select name="reportType" required class="mt-1">
-                <option value="">Select report type</option>
-                <option value="incident">Incident Report</option>
-                <option value="service">Service Report</option>
-                <option value="client">Client Summary</option>
-            </select>
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">Start Date</label>
-            <input type="date" name="startDate" required class="mt-1">
-        </div>
-        <div>
-            <label class="block text-sm font-medium text-gray-700">End Date</label>
-            <input type="date" name="endDate" required class="mt-1">
-        </div>
-    `
-};
+    // Update all translatable elements
+    function updateLanguage() {
+        document.querySelectorAll('[data-en][data-ar]').forEach(element => {
+            element.textContent = isArabic ? element.dataset.ar : element.dataset.en;
+        });
 
-// Open Modal
-function openModal(action) {
-    modalTitle.textContent = {
-        'add-client': 'Add New Client',
-        'schedule-service': 'Schedule Service',
-        'generate-report': 'Generate Report'
-    }[action];
-    formContent.innerHTML = formTemplates[action];
-    actionModal.classList.remove('hidden');
-    setTimeout(() => actionModal.classList.add('show'), 10); // Trigger fade-in
-}
+        // Update the title
+        const title = document.querySelector('title');
+        if (title && title.dataset.ar && title.dataset.en) {
+            title.textContent = isArabic ? title.dataset.ar : title.dataset.en;
+        }
+    }
 
-// Close Modal
-function closeModal() {
-    actionModal.classList.remove('show');
-    setTimeout(() => actionModal.classList.add('hidden'), 300); // Wait for fade-out
-}
+    // Apply language on initial load
+    updateLanguage();
 
-// Event Listeners for Buttons
-actionButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        e.preventDefault();
-        const action = button.getAttribute('data-action');
-        openModal(action);
-    });
-});
+    // Language toggle functionality
+    if (langToggle) {
+        langToggle.addEventListener('click', () => {
+            isArabic = !isArabic;
+            localStorage.setItem('language', isArabic ? 'ar' : 'en');
+            document.documentElement.setAttribute('lang', isArabic ? 'ar' : 'en');
+            document.body.setAttribute('dir', isArabic ? 'rtl' : 'ltr');
+            langToggle.textContent = isArabic ? 'EN' : 'AR';
+            updateLanguage();
+        });
+    }
 
-// Close Modal on Close/Cancel
-closeModalBtn.addEventListener('click', closeModal);
-cancelModalBtn.addEventListener('click', closeModal);
+    // Sidebar Toggle (for services page)
+    const sidebar = document.getElementById('sidebar');
+    const toggleButton = document.getElementById('sidebar-toggle');
+    if (sidebar && toggleButton) {
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-hidden');
+        });
+    }
 
-// Handle Form Submission
-actionForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(actionForm);
-    const data = Object.fromEntries(formData);
-    console.log('Form Submitted:', data); // Replace with actual submission logic
-    closeModal();
-    actionForm.reset();
-});
+    // Modal Toggle (for services page)
+    const addServiceModal = document.getElementById('addServiceModal');
+    const openAddServiceModal = document.getElementById('openAddServiceModal');
+    const closeAddServiceModal = document.getElementById('closeAddServiceModal');
+    if (addServiceModal && openAddServiceModal && closeAddServiceModal) {
+        openAddServiceModal.addEventListener('click', () => {
+            addServiceModal.classList.remove('hidden');
+        });
 
-// Close Modal on Outside Click
-actionModal.addEventListener('click', (e) => {
-    if (e.target === actionModal) closeModal();
+        closeAddServiceModal.addEventListener('click', () => {
+            addServiceModal.classList.add('hidden');
+        });
+
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Service saved! (Placeholder)');
+            addServiceModal.classList.add('hidden');
+        });
+    }
 });

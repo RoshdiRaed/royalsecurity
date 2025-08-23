@@ -1,7 +1,82 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+body {
+    font-family: 'Inter', 'Noto Naskh Arabic', sans-serif;
+}
 
-[x-cloak] {
-    display: none;
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #facc15;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.hero-overlay {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8));
+}
+
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+.footer-link {
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #facc15;
+}
+
+.sidebar {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-hidden {
+    transform: translateX(-100%);
+}
+
+.input-focus:focus {
+    outline: none;
+    ring: 2px;
+    ring-color: #facc15;
+    border-color: #facc15;
+}
+
+[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
+
+[dir="rtl"] .nav-link::after {
+    left: auto;
+    right: 0;
+}
+
+[dir="rtl"] .phone-number span {
+    direction: ltr;
+    display: inline-block;
 }
