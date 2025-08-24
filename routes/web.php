@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LanguageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,3 +14,17 @@ Route::get('/services', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
+Route::get('/portfolio', function () {
+    return view('portfolio');
+})->name('portfolio');
+
+// Language toggle route
+Route::post('/set-locale/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'ar'])) {
+        session()->put('locale', $locale);
+        app()->setLocale($locale);
+        return response()->json(['success' => true]);
+    }
+    return response()->json(['success' => false, 'error' => 'Invalid locale'], 400);
+})->name('set.locale');
