@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +19,8 @@ Route::get('/contact', function () {
 Route::get('/portfolio', function () {
     return view('portfolio');
 })->name('portfolio');
+
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 // Language toggle route
 Route::post('/set-locale/{locale}', function ($locale) {

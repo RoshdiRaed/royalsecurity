@@ -3,15 +3,21 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class SetLocale
 {
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (Session::has('locale')) {
-            app()->setLocale(Session::get('locale'));
+        // تحقق إذا يوجد ?lang=ar أو ?lang=en
+        if ($request->has('lang')) {
+            session(['locale' => $request->get('lang')]);
         }
+
+        // ضبط لغة التطبيق من session أو الانجليزية كافتراضي
+        App::setLocale(session('locale', 'en'));
+
         return $next($request);
     }
 }

@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\PortfolioResource\Pages;
+use App\Models\Portfolio;
+use Filament\Forms;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+
+class PortfolioResource extends Resource
+{
+    protected static ?string $model = Portfolio::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-briefcase';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('title_en')->required()->label('Title (English)'),
+                Forms\Components\TextInput::make('title_ar')->required()->label('Title (Arabic)'),
+                Forms\Components\Textarea::make('description_en')->required()->label('Description (English)'),
+                Forms\Components\Textarea::make('description_ar')->required()->label('Description (Arabic)'),
+                Forms\Components\FileUpload::make('image')->image()->directory('portfolio')->label('Project Image'),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('title_en')->label('Title (English)'),
+                Tables\Columns\TextColumn::make('title_ar')->label('Title (Arabic)'),
+                Tables\Columns\ImageColumn::make('image')->label('Image'),
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListPortfolios::route('/'),
+            'create' => Pages\CreatePortfolio::route('/create'),
+            'edit' => Pages\EditPortfolio::route('/{record}/edit'),
+        ];
+    }
+}
