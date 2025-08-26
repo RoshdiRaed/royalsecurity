@@ -10,7 +10,7 @@ class FilamentAdminSeeder extends Seeder
 {
     public function run()
     {
-        $email = 'roshdi013@gmail.com';
+        $email = 'roshdi@gmail.com';
 
         $user = User::firstOrCreate(
             ['email' => $email], // تحقق إذا موجود
@@ -20,10 +20,5 @@ class FilamentAdminSeeder extends Seeder
                 'is_admin' => true,
             ]
         );
-
-        // إرسال بريد التحقق إذا لم يُفعل بعد
-        // if (!$user->hasVerifiedEmail()) {
-        //     $user->sendEmailVerificationNotification();
-        // }
     }
 }
