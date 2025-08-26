@@ -32,15 +32,3 @@ Route::post('/set-locale/{locale}', function ($locale) {
     return response()->json(['success' => false, 'error' => 'Invalid locale'], 400);
 })->name('set.locale');
 
-Route::get('/create-admin', function () {
-    $user = \App\Models\User::create([
-        'name' => 'Rs',
-        'email' => 'roshdi013@gmail.com',
-        'password' => \Illuminate\Support\Facades\Hash::make('33840'),
-        'is_admin' => true,
-    ]);
-
-    $user->sendEmailVerificationNotification();
-
-    return 'Admin created!';
-});
