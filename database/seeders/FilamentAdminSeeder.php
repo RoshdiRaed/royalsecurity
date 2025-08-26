@@ -22,8 +22,8 @@ class FilamentAdminSeeder extends Seeder
         );
 
         // إرسال بريد التحقق إذا لم يُفعل بعد
-        if (!$user->hasVerifiedEmail()) {
-            $user->sendEmailVerificationNotification();
-        }
+        // if (!$user->hasVerifiedEmail()) {
+        //     $user->sendEmailVerificationNotification();
+        // }
     }
 }

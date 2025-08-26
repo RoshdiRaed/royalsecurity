@@ -1,29 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LanguageController;
+// use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ContactController;
-
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\Request;
-
-// إذا تستخدم Laravel Breeze / Jetstream / Fortify، بعض الطرق موجودة تلقائيًا
-Route::middleware(['auth'])->group(function () {
-    Route::get('/email/verify', function () {
-        return view('auth.verify-email'); // تأكد من وجود هذا الـ view
-    })->name('verification.notice');
-
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        return redirect('/'); // بعد التحقق ارجع للصفحة الرئيسية
-    })->middleware(['auth', 'signed'])->name('verification.verify');
-
-    Route::post('/email/verification-notification', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('message', 'Verification link sent!');
-    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-});
-
 
 Route::get('/', function () {
     return view('welcome');
