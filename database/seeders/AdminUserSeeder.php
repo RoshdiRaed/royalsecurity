@@ -16,7 +16,7 @@ class AdminUserSeeder extends Seeder
                 'name' => 'Admin',
                 'email' => 'admin@gmail.com',
                 'password' => Hash::make('1234'), // غيرها لكلمة سر قوية
-                'is_admin' => true, // إذا عندك عمود يميز المشرفين
+                // 'is_admin' => true, // إذا عندك عمود يميز المشرفين
             ]);
         }
     }
