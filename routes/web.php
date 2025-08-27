@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LanguageController;
+// use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
@@ -31,3 +31,4 @@ Route::post('/set-locale/{locale}', function ($locale) {
     }
     return response()->json(['success' => false, 'error' => 'Invalid locale'], 400);
 })->name('set.locale');
+
