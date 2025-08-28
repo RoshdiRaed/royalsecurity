@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\CreateAction;
 
 class ContactInfoResource extends Resource
 {
@@ -33,6 +34,7 @@ class ContactInfoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+
             ->columns([
                 Tables\Columns\TextColumn::make('address_en')->label('Address (English)'),
                 Tables\Columns\TextColumn::make('phone')->label('Phone'),
@@ -44,6 +46,9 @@ class ContactInfoResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+            ])
+            ->headerActions([
+                CreateAction::make()->label('Add'), // Adds the "Add" button outside the table
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
