@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,3 +33,13 @@ Route::post('/set-locale/{locale}', function ($locale) {
     return response()->json(['success' => false, 'error' => 'Invalid locale'], 400);
 })->name('set.locale');
 
+
+// routes/web.php
+Route::post('/test-login', function (Illuminate\Http\Request $request) {
+    $credentials = $request->only('email', 'password');
+    if (Auth::attempt($credentials)) {
+        return 'Login successful! User: ' . Auth::user()->email;
+
+    }
+    return 'Login failed!';
+});
