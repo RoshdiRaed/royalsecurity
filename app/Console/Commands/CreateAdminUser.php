@@ -9,7 +9,7 @@ class FilamentAdminSeeder extends Seeder
     public function run()
     {
         User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => 'roshdi@gmail.com'],
             [
                 'name' => 'Admin',
                 'password' => Hash::make('1234'),
