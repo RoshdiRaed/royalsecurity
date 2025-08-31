@@ -17,11 +17,11 @@ class AdminUserSeeder extends Seeder
         $password = '1234'; // غيره حسب رغبتك
 
         User::updateOrCreate(
-            ['email' => $email],
+            ['email' => 'admin@gmail.com'],
             [
                 'name' => 'Admin',
-                'password' => Hash::make($password),
-                'is_admin' => true, // تأكد أن العمود موجود
+                'password' => Hash::make('1234'),
+                'is_admin' => 1,
             ]
         );
 
