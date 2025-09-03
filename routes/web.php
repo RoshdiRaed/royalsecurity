@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+
+Route::get('/dashboard', fn() => redirect('/admin'))->name('dashboard');
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,24 +25,12 @@ Route::get('/portfolio', function () {
 
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
-// Language toggle route
-Route::post('/set-locale/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'ar'])) {
-        session()->put('locale', $locale);
-        app()->setLocale($locale);
-        return response()->json(['success' => true]);
-    }
-    return response()->json(['success' => false, 'error' => 'Invalid locale'], 400);
-})->name('set.locale');
-
-Route::get('/create-admin-temp', function () {
-    \App\Models\User::updateOrCreate(
-        ['email' => 'admin@gmail.com'],
-        [
-            'name' => 'Admin',
-            'password' => \Illuminate\Support\Facades\Hash::make('1234'),
-            'is_admin' => 1,
-        ]
-    );
-    return 'Admin created!';
-});
+// شرط: إذا ما في مستخدمين → خلي register شغال
+if (User::count() === 0) {
+    require __DIR__ . '/auth.php';
+} else {
+    Route::middleware('guest')->group(function () {
+        Route::get('/register', fn() => redirect('/login'))->name('register');
+        require __DIR__ . '/auth.php';
+    });
+}

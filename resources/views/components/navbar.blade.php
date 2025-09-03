@@ -1,31 +1,41 @@
 <nav class="fixed top-0 left-0 w-full bg-gray-900/90 backdrop-blur-md shadow-md z-50">
     <div class="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
-
         <!-- Logo -->
         <a href="/" class="flex items-center gap-2">
             <img src="/img/logo.png" alt="logo" class="w-8 h-8 rounded">
-            <span class="font-bold text-yellow-400 text-lg">Royal Security</span>
+            <span class="font-bold text-yellow-400 text-lg">
+                {{ app()->getLocale() === 'ar' ? 'رويال سيكيوريتي' : 'Royal Security' }}
+            </span>
         </a>
 
         <!-- Desktop Links -->
         <div class="hidden md:flex items-center gap-6">
-            <a href="/" class="text-yellow-400 hover:text-yellow-600 transition" data-en="Home"
-                data-ar="الرئيسية">Home</a>
-            <a href="{{ route('service') }}" class="text-yellow-400 hover:text-yellow-600 transition" data-en="Services"
-                data-ar="الخدمات">Services</a>
-            <a href="{{ route('portfolio') }}" class="text-yellow-400 hover:text-yellow-600 transition"
-                data-en="Portfolio" data-ar="المعرض">Portfolio</a>
-            <a href="{{ route('contact') }}" class="text-yellow-400 hover:text-yellow-600 transition" data-en="Contact"
-                data-ar="اتصل بنا">Contact</a>
+            <a href="{{ route('home') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'الرئيسية' : 'Home' }}
+            </a>
+            <a href="{{ route('service') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'الخدمات' : 'Services' }}
+            </a>
+            <a href="{{ route('portfolio') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'المعرض' : 'Portfolio' }}
+            </a>
+            <a href="{{ route('contact') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'اتصل بنا' : 'Contact' }}
+            </a>
         </div>
 
         <!-- Right side -->
         <div class="flex items-center gap-4">
-            <button id="lang-toggle"
-                class="px-3 py-1 rounded-full border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-gray-900 transition">
-                {{ strtoupper(app()->getLocale()) }}
-            </button>
-
+            <form action="{{ url()->current() }}" method="GET" id="lang-form" class="inline">
+                @foreach(request()->except('lang') as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endforeach
+                <input type="hidden" name="lang" value="{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}" id="lang-input">
+                <button type="submit"
+                    class="px-3 py-1 rounded-full border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-gray-900 transition">
+                    {{ app()->getLocale() === 'en' ? 'العربية' : 'English' }}
+                </button>
+            </form>
 
             <!-- Hamburger (Mobile only) -->
             <button id="menu-btn" class="md:hidden flex flex-col gap-1.5">
@@ -37,79 +47,74 @@
     </div>
 
     <!-- Mobile Menu -->
-
     <div id="mobile-menu"
-        class="fixed top-0 right-0 w-64 h-full bg-gray-800 transform translate-x-full transition-transform duration-300 z-40 md:hidden">
+        class="fixed top-0 {{ app()->getLocale() === 'ar' ? 'left-0' : 'right-0' }} w-64 h-full bg-gray-800 transform {{ app()->getLocale() === 'ar' ? '-translate-x-full' : 'translate-x-full' }} transition-transform duration-300 z-40 md:hidden">
         <div class="p-6 flex flex-col gap-6">
-            <a href="/" class="text-yellow-400 hover:text-yellow-600 transition" data-en="Home"
-                data-ar="الرئيسية">Home</a>
-            <a href="{{ route('service') }}" class="text-yellow-400 hover:text-yellow-600 transition" data-en="Services"
-                data-ar="الخدمات">Services</a>
-            <a href="{{ route('portfolio') }}" class="text-yellow-400 hover:text-yellow-600 transition"
-                data-en="Portfolio" data-ar="المعرض">Portfolio</a>
-            <a href="{{ route('contact') }}" class="text-yellow-400 hover:text-yellow-600 transition" data-en="Contact"
-                data-ar="اتصل بنا">Contact</a>
-            <button id="mobile-lang"
-                class="px-3 py-2 rounded-lg border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-gray-900 transition">
-                EN
+            <!-- Close button -->
+            <button id="close-menu" class="self-end text-yellow-400 hover:text-yellow-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
             </button>
+
+            <a href="{{ route('home') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'الرئيسية' : 'Home' }}
+            </a>
+            <a href="{{ route('service') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'الخدمات' : 'Services' }}
+            </a>
+            <a href="{{ route('portfolio') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'المعرض' : 'Portfolio' }}
+            </a>
+            <a href="{{ route('contact') }}" class="text-yellow-400 hover:text-yellow-600 transition">
+                {{ app()->getLocale() === 'ar' ? 'اتصل بنا' : 'Contact' }}
+            </a>
+
+            <form action="{{ url()->current() }}" method="GET" class="inline">
+                @foreach(request()->except('lang') as $key => $value)
+                    <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                @endforeach
+                <input type="hidden" name="lang" value="{{ app()->getLocale() === 'en' ? 'ar' : 'en' }}">
+                <button type="submit"
+                    class="px-3 py-2 rounded-lg border border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-gray-900 transition w-full text-center">
+                    {{ app()->getLocale() === 'en' ? 'العربية' : 'English' }}
+                </button>
+            </form>
         </div>
     </div>
 
     <!-- Overlay -->
-    <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30" onclick="closeMenu()"></div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
 </nav>
+
 <script>
+document.addEventListener('DOMContentLoaded', function() {
     const menuBtn = document.getElementById("menu-btn");
+    const closeMenu = document.getElementById("close-menu");
     const mobileMenu = document.getElementById("mobile-menu");
     const mobileOverlay = document.getElementById("mobile-overlay");
-    const langToggle = document.getElementById("lang-toggle");
+    const isRTL = document.documentElement.dir === 'rtl';
 
-    langToggle.addEventListener("click", () => {
-        let newLang = "{{ app()->getLocale() }}" === "en" ? "ar" : "en";
-        window.location.href = `${window.location.pathname}?lang=${newLang}`;
-    });
+    function openMobileMenu() {
+        if (isRTL) {
+            mobileMenu.classList.remove("-translate-x-full");
+        } else {
+            mobileMenu.classList.remove("translate-x-full");
+        }
+        mobileOverlay.classList.remove("hidden");
+    }
 
-    function toggleLang() {
-    currentLang = currentLang === "EN" ? "AR" : "EN";
-    langToggle.textContent = currentLang;
-    document.documentElement.dir = currentLang === "AR" ? "rtl" : "ltr";
-
-    document.querySelectorAll("[data-en][data-ar]").forEach(el => {
-        el.textContent = el.getAttribute(`data-${currentLang.toLowerCase()}`);
-    });
-}
-
-
-    const mobileLang = document.getElementById("mobile-lang");
-    const menuLinks = document.querySelectorAll("a[data-en][data-ar]");
-    let currentLang = "EN";
-
-    // Toggle mobile menu and overlay
-    menuBtn.addEventListener("click", () => {
-        mobileMenu.classList.toggle("translate-x-full");
-        mobileOverlay.classList.toggle("hidden");
-    });
-
-    // Close mobile menu when overlay is clicked
-    function closeMenu() {
-        mobileMenu.classList.add("translate-x-full");
+    function closeMobileMenu() {
+        if (isRTL) {
+            mobileMenu.classList.add("-translate-x-full");
+        } else {
+            mobileMenu.classList.add("translate-x-full");
+        }
         mobileOverlay.classList.add("hidden");
     }
 
-    // Toggle language
-    function toggleLang() {
-        currentLang = currentLang === "EN" ? "AR" : "EN";
-        langToggle.textContent = currentLang;
-        mobileLang.textContent = currentLang;
-        document.documentElement.dir = currentLang === "AR" ? "rtl" : "ltr";
-
-        // Update menu link text
-        menuLinks.forEach(link => {
-            link.textContent = link.getAttribute(`data-${currentLang.toLowerCase()}`);
-        });
-    }
-
-    langToggle.addEventListener("click", toggleLang);
-    mobileLang.addEventListener("click", toggleLang);
+    menuBtn.addEventListener("click", openMobileMenu);
+    closeMenu.addEventListener("click", closeMobileMenu);
+    mobileOverlay.addEventListener("click", closeMobileMenu);
+});
 </script>
